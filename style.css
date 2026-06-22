@@ -1,0 +1,281 @@
+/* --- Базове скидання та налаштування сторінки --- */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, "Segoe UI", Roboto, sans-serif;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+  background-attachment: fixed;
+  color: #1c1e21;
+  display: flex;
+  justify-content: center;
+  padding: 40px 16px;
+  min-height: 100vh;
+}
+
+/* --- Контейнер-картка по центру --- */
+.container {
+  background: #fff;
+  width: 100%;
+  max-width: 480px;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  padding: 24px;
+}
+
+h1 {
+  font-size: 1.6rem;
+  text-align: center;
+  margin-bottom: 20px;
+  background: linear-gradient(135deg, #667eea, #f5576c);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* --- Форма додавання --- */
+.todo-form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.todo-form input {
+  flex: 1 1 100%;
+  padding: 10px 12px;
+  border: 1px solid #ccd0d5;
+  border-radius: 8px;
+  font-size: 1rem;
+}
+
+.todo-form select {
+  flex: 1;
+  padding: 10px 12px;
+  border: 1px solid #ccd0d5;
+  border-radius: 8px;
+  font-size: 1rem;
+  background: #fff;
+  cursor: pointer;
+}
+
+.todo-form input:focus {
+  outline: none;
+  border-color: #1877f2;
+}
+
+.todo-form button {
+  padding: 10px 18px;
+  border: none;
+  border-radius: 8px;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: #fff;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.1s, box-shadow 0.15s;
+}
+
+.todo-form button:hover {
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+  transform: translateY(-1px);
+}
+
+/* --- Кнопки-фільтри --- */
+.filters {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.filter-btn {
+  flex: 1;
+  padding: 8px;
+  border: 1px solid #ccd0d5;
+  border-radius: 8px;
+  background: #fff;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: all 0.15s;
+}
+
+.filter-btn:hover {
+  background: #f0f2f5;
+}
+
+/* Активний (увімкнений) фільтр підсвічується */
+.filter-btn.active {
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: #fff;
+  border-color: transparent;
+  font-weight: 600;
+}
+
+/* --- Список завдань, згрупований по днях --- */
+.todo-list {
+  list-style: none;
+}
+
+/* Один розділ = один день тижня (кольорова картка) */
+.day-section {
+  margin-bottom: 14px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border-left: 5px solid #ccc; /* колір перевизначається для кожного дня */
+  background: #fafbfc;
+}
+
+/* Заголовок дня (Понеділок, Вівторок, ...) */
+.day-header {
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding-bottom: 6px;
+  display: flex;
+  justify-content: space-between;
+}
+
+/* Кількість завдань у дні — кольорова "пігулка" */
+.day-header .day-count {
+  font-weight: 700;
+  background: rgba(0, 0, 0, 0.06);
+  border-radius: 10px;
+  padding: 1px 9px;
+  font-size: 0.75rem;
+}
+
+/* --- Свій колір для кожного дня тижня --- */
+.day-mon { border-left-color: #f5576c; background: #fff5f6; }
+.day-mon .day-header { color: #f5576c; }
+
+.day-tue { border-left-color: #f7971e; background: #fff9f0; }
+.day-tue .day-header { color: #d97d0a; }
+
+.day-wed { border-left-color: #f9d423; background: #fffdf0; }
+.day-wed .day-header { color: #b89a00; }
+
+.day-thu { border-left-color: #38ef7d; background: #f1fff7; }
+.day-thu .day-header { color: #1aaf5a; }
+
+.day-fri { border-left-color: #11998e; background: #f0fbfa; }
+.day-fri .day-header { color: #0e857c; }
+
+.day-sat { border-left-color: #4facfe; background: #f0f8ff; }
+.day-sat .day-header { color: #2b8cf0; }
+
+.day-sun { border-left-color: #a26bfa; background: #f8f4ff; }
+.day-sun .day-header { color: #8a4be0; }
+
+/* Підсвічування сьогоднішнього дня — рамка по колу */
+.day-section.today {
+  box-shadow: 0 0 0 2px rgba(102, 126, 234, 0.35);
+}
+
+/* Список завдань усередині дня */
+.day-section ul {
+  list-style: none;
+}
+
+/* Підказка, коли в дні немає завдань */
+.day-empty {
+  padding: 10px 4px;
+  color: #b0b3b8;
+  font-size: 0.85rem;
+  font-style: italic;
+}
+
+.todo-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 4px;
+  border-bottom: 1px solid #eceef0;
+}
+
+/* Кастомний круглий чекбокс із зеленою галочкою */
+.todo-item input[type="checkbox"] {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 22px;
+  height: 22px;
+  border: 2px solid #ccd0d5;
+  border-radius: 50%;
+  cursor: pointer;
+  flex-shrink: 0;
+  position: relative;
+  transition: all 0.15s;
+}
+
+.todo-item input[type="checkbox"]:hover {
+  border-color: #38ef7d;
+}
+
+/* Коли завдання виконане — кружечок зеленіє */
+.todo-item input[type="checkbox"]:checked {
+  background: linear-gradient(135deg, #38ef7d, #11998e);
+  border-color: #11998e;
+}
+
+/* Біла галочка всередині (намальована через рамки) */
+.todo-item input[type="checkbox"]:checked::after {
+  content: "";
+  position: absolute;
+  left: 6px;
+  top: 2px;
+  width: 5px;
+  height: 10px;
+  border: solid #fff;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
+.todo-item .text {
+  flex: 1;
+  word-break: break-word;
+}
+
+/* Стиль виконаного завдання */
+.todo-item.completed .text {
+  text-decoration: line-through;
+  color: #8a8d91;
+}
+
+.todo-item .delete-btn {
+  border: none;
+  background: transparent;
+  color: #c0c4c9;
+  font-size: 1.2rem;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.todo-item .delete-btn:hover {
+  color: #e41e3f;
+}
+
+/* --- Нижній рядок --- */
+.footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 16px;
+  font-size: 0.85rem;
+  color: #65676b;
+}
+
+.footer button {
+  border: none;
+  background: transparent;
+  color: #65676b;
+  cursor: pointer;
+  font-size: 0.85rem;
+}
+
+.footer button:hover {
+  color: #e41e3f;
+  text-decoration: underline;
+}

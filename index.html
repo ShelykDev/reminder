@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Мій список завдань</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="container">
+    <h1>📝 Мій список завдань</h1>
+
+    <!-- Форма для додавання нового завдання -->
+    <form id="todo-form" class="todo-form">
+      <input
+        type="text"
+        id="todo-input"
+        placeholder="Що потрібно зробити?"
+        autocomplete="off"
+      />
+      <!-- Вибір дня тижня для завдання -->
+      <select id="day-select">
+        <option value="mon">Понеділок</option>
+        <option value="tue">Вівторок</option>
+        <option value="wed">Середа</option>
+        <option value="thu">Четвер</option>
+        <option value="fri">П'ятниця</option>
+        <option value="sat">Субота</option>
+        <option value="sun">Неділя</option>
+      </select>
+      <button type="submit">Додати</button>
+    </form>
+
+    <!-- Кнопки-фільтри (тоґли) -->
+    <div class="filters">
+      <button class="filter-btn active" data-filter="all">Всі</button>
+      <button class="filter-btn" data-filter="active">Активні</button>
+      <button class="filter-btn" data-filter="completed">Виконані</button>
+    </div>
+
+    <!-- Сюди JavaScript буде додавати розділи по днях тижня -->
+    <div id="todo-list" class="todo-list"></div>
+
+    <!-- Лічильник + кнопка очищення виконаних -->
+    <div class="footer">
+      <span id="items-count">0 завдань</span>
+      <button id="clear-completed">Очистити виконані</button>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
