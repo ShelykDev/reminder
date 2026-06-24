@@ -267,15 +267,19 @@ h1 {
   color: #65676b;
 }
 
-.footer button {
-  border: none;
-  background: transparent;
+#clear-completed {
+  border: 1px solid #ccd0d5;
+  background: #fff;
   color: #65676b;
   cursor: pointer;
   font-size: 0.85rem;
+  padding: 6px 14px;
+  border-radius: 8px;
+  transition: all 0.15s;
 }
 
-.footer button:hover {
-  color: #e41e3f;
-  text-decoration: underline;
+#clear-completed:hover {
+  background: #e41e3f;
+  border-color: #e41e3f;
+  color: #fff;
 }
