@@ -1,48 +1,39 @@
 const { test, expect } = require('@playwright/test');
 const { TodoPage } = require('./pages/TodoPage');
 
-test.describe('Додавання завдань', () => {
-  test('додає завдання до списку після натискання кнопки', async ({ page }) => {
-    const todoPage = new TodoPage(page);
-    await todoPage.open();
+let todoPage;
 
+test.beforeEach(async ({ page }) => {
+  todoPage = new TodoPage(page);
+  await todoPage.open();
+});
+
+test.describe('Додавання завдань', () => {
+  test('додає завдання до списку після натискання кнопки', async () => {
     await todoPage.addTodo('Купити молоко', 'mon');
 
     await expect(todoPage.getTodoItem('Купити молоко')).toBeVisible();
   });
 
-  test('поле вводу очищується після додавання', async ({ page }) => {
-    const todoPage = new TodoPage(page);
-    await todoPage.open();
-
+  test('поле вводу очищується після додавання', async () => {
     await todoPage.addTodo('Зробити домашнє завдання');
 
     await expect(todoPage.input).toHaveValue('');
   });
 
-  test('не додає порожнє завдання', async ({ page }) => {
-    const todoPage = new TodoPage(page);
-    await todoPage.open();
-
+  test('не додає порожнє завдання', async () => {
     await todoPage.submitBtn.click();
 
     await expect(todoPage.todoList.locator('.todo-item')).toHaveCount(0);
   });
 
-  test('завдання потрапляє у правильний день тижня', async ({ page }) => {
-    const todoPage = new TodoPage(page);
-    await todoPage.open();
-
+  test('завдання потрапляє у правильний день тижня', async () => {
     await todoPage.addTodo('Похід у спортзал', 'fri');
 
-    const fridaySection = todoPage.getDaySection('fri');
-    await expect(fridaySection.getByText('Похід у спортзал')).toBeVisible();
+    await expect(todoPage.getDaySection('fri').getByText('Похід у спортзал')).toBeVisible();
   });
 
-  test('завдання потрапляють у правильні секції для всіх днів тижня', async ({ page }) => {
-    const todoPage = new TodoPage(page);
-    await todoPage.open();
-
+  test('завдання потрапляють у правильні секції для всіх днів тижня', async () => {
     const days = [
       { day: 'mon', text: 'Завдання на понеділок' },
       { day: 'tue', text: 'Завдання на вівторок' },
@@ -58,27 +49,20 @@ test.describe('Додавання завдань', () => {
     }
 
     for (const { day, text } of days) {
-      const daySection = todoPage.getDaySection(day);
-      await expect(daySection.getByText(text)).toBeVisible();
+      await expect(todoPage.getDaySection(day).getByText(text)).toBeVisible();
     }
   });
 });
 
 test.describe('Виконання та видалення завдань', () => {
-  test('відмічає завдання як виконане через чекбокс', async ({ page }) => {
-    const todoPage = new TodoPage(page);
-    await todoPage.open();
-
+  test('відмічає завдання як виконане через чекбокс', async () => {
     await todoPage.addTodo('Прочитати книгу', 'tue');
     await todoPage.toggleTodo('Прочитати книгу');
 
     await expect(todoPage.getTodoItem('Прочитати книгу')).toHaveClass(/completed/);
   });
 
-  test('видаляє завдання зі списку', async ({ page }) => {
-    const todoPage = new TodoPage(page);
-    await todoPage.open();
-
+  test('видаляє завдання зі списку', async () => {
     await todoPage.addTodo('Тимчасове завдання', 'wed');
     await todoPage.deleteTodo('Тимчасове завдання');
 
@@ -87,10 +71,7 @@ test.describe('Виконання та видалення завдань', () =>
 });
 
 test.describe('Фільтри', () => {
-  test('фільтр "Активні" показує лише невиконані завдання', async ({ page }) => {
-    const todoPage = new TodoPage(page);
-    await todoPage.open();
-
+  test('фільтр "Активні" показує лише невиконані завдання', async () => {
     await todoPage.addTodo('Активне завдання', 'mon');
     await todoPage.addTodo('Виконане завдання', 'mon');
     await todoPage.toggleTodo('Виконане завдання');
@@ -101,10 +82,7 @@ test.describe('Фільтри', () => {
     await expect(todoPage.getTodoItem('Виконане завдання')).toHaveCount(0);
   });
 
-  test('фільтр "Виконані" показує лише виконані завдання', async ({ page }) => {
-    const todoPage = new TodoPage(page);
-    await todoPage.open();
-
+  test('фільтр "Виконані" показує лише виконані завдання', async () => {
     await todoPage.addTodo('Активне', 'tue');
     await todoPage.addTodo('Виконане', 'tue');
     await todoPage.toggleTodo('Виконане');
@@ -115,10 +93,7 @@ test.describe('Фільтри', () => {
     await expect(todoPage.getTodoItem('Активне')).toHaveCount(0);
   });
 
-  test('фільтр "Всі" показує всі завдання', async ({ page }) => {
-    const todoPage = new TodoPage(page);
-    await todoPage.open();
-
+  test('фільтр "Всі" показує всі завдання', async () => {
     await todoPage.addTodo('Перше', 'mon');
     await todoPage.addTodo('Друге', 'mon');
     await todoPage.toggleTodo('Друге');
@@ -132,20 +107,28 @@ test.describe('Фільтри', () => {
 });
 
 test.describe('Лічильник та очищення', () => {
-  test('лічильник показує кількість активних завдань', async ({ page }) => {
-    const todoPage = new TodoPage(page);
-    await todoPage.open();
-
+  test('лічильник показує правильну кількість активних завдань (форма множини)', async () => {
     await todoPage.addTodo('Завдання 1', 'mon');
     await todoPage.addTodo('Завдання 2', 'tue');
 
-    await expect(todoPage.itemsCount).toHaveText('2 завдань');
+    await expect(todoPage.itemsCount).toHaveText(/2 завдань/);
   });
 
-  test('кнопка "Очистити виконані" видаляє всі виконані завдання', async ({ page }) => {
-    const todoPage = new TodoPage(page);
-    await todoPage.open();
+  test('лічильник показує правильну форму для одного завдання', async () => {
+    await todoPage.addTodo('Єдине завдання', 'mon');
 
+    await expect(todoPage.itemsCount).toHaveText(/1 завдання/);
+  });
+
+  test('лічильник зменшується після позначення завдання виконаним', async () => {
+    await todoPage.addTodo('Завдання 1', 'mon');
+    await todoPage.addTodo('Завдання 2', 'mon');
+    await todoPage.toggleTodo('Завдання 1');
+
+    await expect(todoPage.itemsCount).toHaveText(/1 завдання/);
+  });
+
+  test('кнопка "Очистити виконані" видаляє всі виконані завдання', async () => {
     await todoPage.addTodo('Залишити', 'mon');
     await todoPage.addTodo('Видалити', 'mon');
     await todoPage.toggleTodo('Видалити');
@@ -154,5 +137,24 @@ test.describe('Лічильник та очищення', () => {
 
     await expect(todoPage.getTodoItem('Залишити')).toBeVisible();
     await expect(todoPage.getTodoItem('Видалити')).toHaveCount(0);
+  });
+});
+
+test.describe('Збереження даних (localStorage)', () => {
+  test('завдання зберігаються після перезавантаження сторінки', async () => {
+    await todoPage.addTodo('Збережене завдання', 'thu');
+
+    await todoPage.open();
+
+    await expect(todoPage.getTodoItem('Збережене завдання')).toBeVisible();
+  });
+
+  test('стан виконаного завдання зберігається після перезавантаження', async () => {
+    await todoPage.addTodo('Виконане збережене', 'fri');
+    await todoPage.toggleTodo('Виконане збережене');
+
+    await todoPage.open();
+
+    await expect(todoPage.getTodoItem('Виконане збережене')).toHaveClass(/completed/);
   });
 });

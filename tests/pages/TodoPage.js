@@ -27,11 +27,11 @@ class TodoPage {
   }
 
   async toggleTodo(text) {
-    await this.todoList.getByText(text).locator('..').locator('input[type="checkbox"]').click();
+    await this.getTodoItem(text).locator('input[type="checkbox"]').click();
   }
 
   async deleteTodo(text) {
-    await this.todoList.getByText(text).locator('..').locator('.delete-btn').click();
+    await this.getTodoItem(text).locator('.delete-btn').click();
   }
 
   getTodoItem(text) {
